@@ -1,0 +1,48 @@
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<div class="container">
+    <h1>Balancing Act Message Board </h1>
+    <div class="form-group">
+        <form method="POST" action="/message" id="messageboard">
+            <label for="Title">Subject</label>
+            <input type="text" class="form-control" name="title" /><br/>
+            <label for="body">Body</label>
+            <textarea name="body" class="form-control" form="messageboard"></textarea><br/>
+            <input type="submit" />
+        </form>
+    </div>
+    
+
+<h1>Messages</h1>
+<ul id="messages"></ul>
+
+</div>>
+<script>
+      function createNode(element) {
+      return document.createElement(element);
+  }
+
+  function append(parent, el) {
+    return parent.appendChild(el);
+  }
+
+  const ul = document.getElementById('messages');
+  const url = 'http://localhost:3000/messages';
+  fetch(url)
+  .then((resp) => resp.json())
+  .then(function(data) { 
+    let messages = data;
+    return messages.map(function(message) {
+      let li = createNode('li'),
+          span = createNode('span');
+      span.innerHTML = '<a href="http://localhost:3000/msg/?id=' + `${message._id}` +'">' + `${message.title}`;
+      append(li, span);
+      append(ul, li);
+    })
+  })
+  .catch(function(error) {
+    console.log(JSON.stringify(error));
+  });  
+
+</script>

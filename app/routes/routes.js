@@ -1,10 +1,21 @@
 var ObjectID = require('mongodb').ObjectID;
 
 module.exports = function(app, db) {
-  app.get('/notes/:id', (req, res) => {
+  app.get('/messages/', (req, res) => {
+    const coll = db.collection('message');
+    coll.find({}).toArray(function (err, result) {
+      if (err) {
+          res.send(err);
+      } else {
+
+          res.send(JSON.stringify(result));
+      }
+  })
+  });
+  app.get('/message/:id', (req, res) => {
     const id = req.params.id;
     const details = {'_id': new ObjectID(id)};
-    db.collection('notes').findOne(details, (err, item) => {
+    db.collection('message').findOne(details, (err, item) => {
       if (err) {
         res.send({'error':'An error has occurred'});
       } else {
@@ -13,20 +24,22 @@ module.exports = function(app, db) {
     });
   });
   const collection = 
-  app.post('/notes', (req, res) => {
+  app.post('/message', (req, res) => {
     const note = { text: req.body.body, title: req.body.title };
-    db.collection('notes').insert(note, (err, result) => {
+    db.collection('message').insert(note, (err, result) => {
       if (err) { 
         res.send({ 'error': 'An error has occurred' }); 
       } else {
-        res.send(result.ops[0]);
+        res.redirect('http://localhost:3000');
+       // res.send(result.ops[0]);
+        
       }
     });
   });
-    app.delete('/notes/:id', (req, res) => {
+    app.delete('/message/:id', (req, res) => {
     const id = req.params.id;
     const details = { '_id': new ObjectID(id) };
-    db.collection('notes').remove(details, (err, item) => {
+    db.collection('message').remove(details, (err, item) => {
       if (err) {
         res.send({'error':'An error has occurred'});
       } else {
@@ -35,11 +48,11 @@ module.exports = function(app, db) {
     });
   });
   
-    app.put('/notes/:id', (req, res) => {
+    app.put('/message/:id', (req, res) => {
     const id = req.params.id;
     const details = { '_id': new ObjectID(id) };
     const note = { text: req.body.body, title: req.body.title };
-    db.collection('notes').update(details, note, (err, result) => {
+    db.collection('message').update(details, note, (err, result) => {
       if (err) {
           res.send({'error':'An error has occurred'});
       } else {

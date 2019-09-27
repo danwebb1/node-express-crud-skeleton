@@ -1,0 +1,50 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<div class="container">
+    <h1 id="title">
+
+    </h1>
+    <p id="body">
+
+    </p>
+    <a href="http://localhost:3000/">Back</a>
+</div>
+
+
+<script>
+
+
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+}
+
+        function createNode(element) {
+        return document.createElement(element);
+    }
+  
+    function append(parent, el) {
+      return parent.appendChild(el);
+    }
+    let msgId = getUrlVars().id;
+    const h1 = document.getElementById('title'); 
+    const p = document.getElementById('body'); 
+    const url = 'http://localhost:3000/message/' + msgId;
+    fetch(url)
+    .then((resp) => resp.json())
+    .then(function(data) { console.log(data);
+        let span = createNode('span');
+        span.innerHTML = data.title;
+        let span2 = createNode('span');
+        span2.innerHTML = data.text;
+        append(h1, span);
+        append(p, span2);
+    })
+    .catch(function(error) {
+      console.log(JSON.stringify(error));
+    });  
+  
+  </script>
